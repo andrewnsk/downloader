@@ -1,10 +1,10 @@
-**sdow is a Python simple HTTP downloader**
-##
-_usage:_
+#sdow is a Python simple HTTP downloader
+
+###usage:
 
 $sdow.py http://host.name/file
 
 
-This supports:
-+progress-bar
-+download resume
+###This supports:
++ progress-bar
++ download resume
