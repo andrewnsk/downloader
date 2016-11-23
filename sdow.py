@@ -1,7 +1,7 @@
-import requests
 from tqdm import tqdm
-import os.path
+import requests
 import argparse
+import os.path
 import sys
 
 parser = argparse.ArgumentParser()
@@ -12,14 +12,26 @@ local_filename = url.split('/')[-1]
 
 
 def get_file_size(url):
+    """
+    Get and return content-length
+    :param url: str value of address
+    :return content-length from HEAD HTTP query or False
 
+    """
     r = requests.head(url)
     if r.status_code == requests.codes.ok:
         return r.headers['content-length']
+    else:
+        return False
 
 
 def download_file(url, local_filename):
-
+    """
+    Download file from given url, and save it as local_filename
+    :param url: str value of address
+    :param local_filename: name of file
+    :return: None
+    """
     r = requests.get(url, stream=True)
     if r.status_code == requests.codes.ok:
         print(r.headers['content-type'], r.status_code, end='\n')
@@ -39,10 +51,17 @@ def download_file(url, local_filename):
             if chunk:  # filter out keep-alive new chunks
                 f.write(chunk)
     f.close()
-    return True
 
 
 def resume_download_file(url, local_filename, bytes_range, estimate_size):
+    """
+    Check if file exist, file size, and resume download it
+    :param url: str value of address
+    :param local_filename: name of file
+    :param bytes_range: bytes to download
+    :param estimate_size: size in bytes
+    :return: None
+    """
     headers = {'Range': 'bytes={0}'.format(bytes_range)}
     r = requests.get(url, stream=True, headers=headers)
     print('resume downloading')
@@ -55,10 +74,15 @@ def resume_download_file(url, local_filename, bytes_range, estimate_size):
             if chunk:  # filter out keep-alive new chunks
                 f.write(chunk)
     f.close()
-    return True
 
-if __name__ == '__main__':
 
+def proc():
+    """
+    Check if file exist, get file size, get remote file size
+    if they equal there noting to do, else
+    download file or part of file
+    :return: None
+    """
     if os.path.exists(local_filename):
         print('file exist')
         local_file_size = os.path.getsize(local_filename)
@@ -74,6 +98,10 @@ if __name__ == '__main__':
         resume_download_file(url, local_filename, bytes_range, estimate_size)
     else:
         download_file(url, local_filename)
+
+if __name__ == '__main__':
+    proc()
+
 
 
 
