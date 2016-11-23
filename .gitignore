@@ -1,0 +1,9 @@
+# IntelliJ project files
+.idea
+.idea/*
+*.iml
+out
+gen
+output.jpg
+popping.avi
+header.jpg

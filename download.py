@@ -1,23 +1,32 @@
 import http.client
 import urllib.parse
+import httplib2
+import sys
 
 # params = urllib.parse.urlencode({'@number': 12524, '@type': 'issue', '@action': 'show'})
+# headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
 
 
-def partial_download(hostname, path):
-    params = ''
-    headers = {}
+def connect(hostname, path='/', params='', headers={'Connection': 'keep-alive'}):
     conn = http.client.HTTPConnection(hostname)
     conn.request("HEAD", path, params, headers)
-
     response = conn.getresponse()
-    print(response.status, response.reason, response.headers)
-    conn.close()
+    return response
+
+
+def get_length(response):
+    length = response.getheader('Content-Length')
+    return int(length)
+
+
+def is_accept_ranges(response):
     if response.getheader('Accept-Ranges') == "bytes":
         return True
 
 
 def download(hostname, path):
+    if not is_accept_ranges(hostname, path):
+        sys.exit(1)
     params = ''
     headers = {'Range': 'bytes=0-5'}
     conn = http.client.HTTPConnection(hostname)
@@ -28,7 +37,10 @@ def download(hostname, path):
     data = response.read()
     print(response.getheader('Accept-Ranges:'))
     print(data)
-    conn.close()
+
+
+def close(connection):
+    connection.close()
 
 
 """
@@ -43,4 +55,12 @@ Accept-Ranges: bytes
 if __name__ == '__main__':
     hostname = "127.0.0.1:80"
     path = "/header.jpg"
-    print(partial_download(hostname, path))
+    localhost = connect(hostname, path)
+    length = get_length(localhost)
+    if is_accept_ranges(localhost):
+        print('Accept-Ranges OK,', 'filesize:', length)
+        sys.exit(0)
+
+    else:
+        print('host does not support multiple threads')
+        sys.exit(1)
