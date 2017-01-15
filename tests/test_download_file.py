@@ -3,8 +3,6 @@ import unittest
 from downloader.sdow import get_file_size, download_file, resume_download_file, proc
 import builtins
 
-# TODO: [*] Write tests to all functions
-
 
 def mock_get(data):
     """Mock of requests.get. The object returned must have headers and iter_content properties."""
