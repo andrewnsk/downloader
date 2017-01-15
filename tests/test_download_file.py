@@ -3,6 +3,8 @@ import unittest
 from downloader.sdow import get_file_size, download_file, resume_download_file, proc
 import builtins
 
+# TODO: [*] Write tests to all functions
+
 
 def mock_get(data):
     """Mock of requests.get. The object returned must have headers and iter_content properties."""
@@ -29,16 +31,19 @@ class TestDownloader(unittest.TestCase):
                                                        'content-type': 'application/json'},
                                               status_code=200))
     def test_get_file_size(self, *args):
+        """call mocked function """
         self.assertEqual(get_file_size('mock.url'), 4096)
 
     @patch('requests.get', return_value=mock_get(DATA))
     @patch('builtins.open')
     def test_download_file(self, *args):
+        """call mocked function """
         download_file('url', 'file')
 
     @patch('requests.get', return_value=mock_get(DATA))
     @patch('builtins.open')
     def test_resume_download_file(self, *args):
+        """call mocked function """
         resume_download_file('mock.url', 'mock.file', '123-256', 500)
 
 if __name__ == '__main__':
