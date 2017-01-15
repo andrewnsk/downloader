@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from setuptools import setup
 
@@ -9,7 +9,7 @@ setup(
     author='Andrew Dorokhin (@andrewnsk)',
     author_email='andrew@dorokhin.moscow',
     url='http://github.com/andrewnsk/downloader',
-    packages=['downloader', 'tests'],
+    packages=['downloader', 'tests.unit'],
     long_description="""\
       http file downloader
       """,
