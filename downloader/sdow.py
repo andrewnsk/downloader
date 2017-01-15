@@ -4,12 +4,6 @@ import argparse
 import os.path
 import sys
 
-parser = argparse.ArgumentParser()
-parser.add_argument("url", help="url for file", type=str)
-args = parser.parse_args()
-url = args.url
-local_filename = url.split('/')[-1]
-
 
 def get_file_size(url):
     """
@@ -32,6 +26,7 @@ def download_file(url, local_filename):
     :param local_filename: name of file
     :return: None
     """
+    global total_size
     r = requests.get(url, stream=True)
     if r.status_code == requests.codes.ok:
         print(r.headers['content-type'], r.status_code, end='\n')
@@ -92,7 +87,7 @@ def proc():
         estimate_size = round((remote_file_size - local_file_size) / 1024)
         if local_file_size >= remote_file_size:
             print('Nothing to do')
-            sys.exit(1)
+            sys.exit(0)
         bytes_range = '{0}-{1}'.format(local_file_size, remote_file_size)
         print('Range in:', bytes_range)
         resume_download_file(url, local_filename, bytes_range, estimate_size)
@@ -100,8 +95,13 @@ def proc():
         download_file(url, local_filename)
 
 if __name__ == '__main__':
-    proc()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("url", help="url for file", type=str)
+    args = parser.parse_args()
+    url = args.url
+    local_filename = url.split('/')[-1]
 
+    proc()
 
 
 
