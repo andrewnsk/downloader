@@ -1,0 +1,15 @@
+language: python
+python:
+  - "3.5"
+install:
+  - pip install coverage tox virtualenv
+  - pip install coveralls
+script:
+  - tox
+  - coverage run --source=coverpass  --rcfile=.coveragerc setup.py test -s tests.unit
+after_success:
+  - bash <(curl -s https://codecov.io/bash && coveralls)
+notifications:
+  email:
+    on_failure: change
+sudo: false
