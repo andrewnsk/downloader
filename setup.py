@@ -27,5 +27,5 @@ setup(
     },
     keywords='download http',
     license='MIT',
-    test_suite='tests'
+    test_suite='tests', install_requires=['requests', 'tqdm', 'argparse']
 )
