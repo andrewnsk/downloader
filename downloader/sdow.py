@@ -79,17 +79,12 @@ def proc():
     :return: None
     """
     if os.path.exists(local_filename):
-        print('file exist')
         local_file_size = os.path.getsize(local_filename)
         remote_file_size = int(get_file_size(url))
-        print('Local size:', local_file_size)
-        print('Remote size:', remote_file_size)
         estimate_size = round((remote_file_size - local_file_size) / 1024)
-        if local_file_size >= remote_file_size:
-            print('Nothing to do')
+        if local_file_size == remote_file_size:
             sys.exit(0)
         bytes_range = '{0}-{1}'.format(local_file_size, remote_file_size)
-        print('Range in:', bytes_range)
         resume_download_file(url, local_filename, bytes_range, estimate_size)
     else:
         download_file(url, local_filename)
