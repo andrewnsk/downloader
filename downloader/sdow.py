@@ -76,7 +76,7 @@ def proc(url, local_filename):
     Check if file exist, get file size, get remote file size
     if they equal there noting to do, else
     download file or part of file
-    :return: None
+    :return: True if downloading is successful or False else
     """
 
     local_file_size = os.path.getsize(local_filename)
