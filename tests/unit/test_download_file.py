@@ -44,5 +44,15 @@ class TestDownloader(unittest.TestCase):
         """call mocked function """
         resume_download_file('mock.url', 'mock.file', '123-256', 500)
 
+    @patch('requests.head', return_value=Mock(headers={'content-length': 4096, 'Status': '200 OK',
+                                                       'content-type': 'application/json'},
+                                              status_code=200))
+    @patch('requests.get', return_value=mock_get(DATA))
+    @patch('builtins.open')
+    @patch('os.path.getsize', return_value=4096)
+    def test_proc(self, *args):
+        """call mocked function """
+        self.assertTrue(proc('mock.url', 'filename'))
+
 if __name__ == '__main__':
     unittest.main()

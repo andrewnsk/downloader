@@ -71,23 +71,33 @@ def resume_download_file(url, local_filename, bytes_range, estimate_size):
     f.close()
 
 
-def proc():
+def proc(url, local_filename):
     """
     Check if file exist, get file size, get remote file size
     if they equal there noting to do, else
     download file or part of file
     :return: None
     """
+
+    local_file_size = os.path.getsize(local_filename)
+    remote_file_size = int(get_file_size(url))
+    estimate_size = round((remote_file_size - local_file_size) / 1024)
+
     if os.path.exists(local_filename):
-        local_file_size = os.path.getsize(local_filename)
-        remote_file_size = int(get_file_size(url))
-        estimate_size = round((remote_file_size - local_file_size) / 1024)
-        if local_file_size == remote_file_size:
-            sys.exit(0)
-        bytes_range = '{0}-{1}'.format(local_file_size, remote_file_size)
-        resume_download_file(url, local_filename, bytes_range, estimate_size)
+
+        if local_file_size != remote_file_size:
+            bytes_range = '{0}-{1}'.format(local_file_size, remote_file_size)
+            resume_download_file(url, local_filename, bytes_range, estimate_size)
+
     else:
+
         download_file(url, local_filename)
+
+    if os.path.getsize(local_filename) == remote_file_size:
+
+        return True
+    else:
+        return False
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -96,7 +106,7 @@ if __name__ == '__main__':
     url = args.url
     local_filename = url.split('/')[-1]
 
-    proc()
+    proc(url, local_filename)
 
 
 
