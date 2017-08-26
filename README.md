@@ -1,12 +1,15 @@
 [![Build Status](https://travis-ci.org/andrewnsk/downloader.svg?branch=master)](https://travis-ci.org/andrewnsk/downloader)
 [![Coverage Status](https://coveralls.io/repos/github/andrewnsk/downloader/badge.svg?branch=master)](https://coveralls.io/github/andrewnsk/downloader?branch=master)
-#sdow is a Python simple HTTP downloader
 
-###usage:
+# sdow is a Python simple HTTP downloader
+---
 
+# usage:
+
+```shell
 $sdow.py http://host.name/file
+```
 
-
-###This supports:
+# This supports:
 + progress-bar
 + download resume
